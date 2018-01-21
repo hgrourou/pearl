@@ -2,20 +2,26 @@
   <h1>orders</h1>
 </template>
 <script>
-import { loadOrders } from '@/api/order/orderService'
+import { loadOrders, getOrder } from '@/api/order/orderService'
 export default {
   data () {
     return {}
   },
   mounted () {
-    this.loadOrders();
+    this.loadOrderList();
+    this.getOrderById(59);
   },
   methods: {
-    loadOrders () {
+    loadOrderList () {
       loadOrders().then( data => {
         
       }, data => {
         console.log(data)
+      })
+    },
+    getOrderById (id) {
+      getOrder(id).then( data => {
+
       })
     }
   }

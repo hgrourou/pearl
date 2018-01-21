@@ -9,7 +9,9 @@ axios.interceptors.request.use(function (config) {
     config.data = JSON.stringify(config.data)
   }
   let token = getCookie('token')
-  config.headers.Authorization = 'Bearer ' + token
+  if(token) {
+    config.headers.Authorization = 'Bearer ' + token
+  }
   return config;
 }, function (error) {
   return Promise.reject(error);
