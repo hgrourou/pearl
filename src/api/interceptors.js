@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCookie } from '@/util/cookie'
+import router from '@/router'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.put['Content-Type'] = 'application/json';
@@ -15,6 +16,17 @@ axios.interceptors.request.use(function (config) {
   return config;
 }, function (error) {
   return Promise.reject(error);
+});
+
+axios.interceptors.response.use(response => {
+  return response;
+}, error => {
+    if (error) {
+      router.push({
+        name: 'login',
+      })
+    }
+    return Promise.reject(error.response.data) 
 });
 
 export default axios

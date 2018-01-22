@@ -1,28 +1,65 @@
 <template>
-  <h1>orders</h1>
+  <div>
+    <el-table
+      :data="tableData"
+      stripe
+      :header-cell-style="{'text-align':'center'}"
+      style="width: 100%">
+      <el-table-column
+        prop="id"
+        label="订单ID">
+      </el-table-column>
+      <el-table-column
+        prop="buyer.nickName"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="orderItems[0].product.title"
+        label="商品">
+      </el-table-column>
+      <el-table-column
+        prop="totalProductPrice"
+        label="订单金额">
+      </el-table-column>
+      <el-table-column
+        prop="orderStatus"
+        label="订单状态">
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-count="total"
+      :current-page="currentPage"
+      @current-change="pageCurrentChange">
+    </el-pagination>
+  </div>
 </template>
 <script>
 import { loadOrders, getOrder } from '@/api/order/orderService'
 export default {
   data () {
-    return {}
+    return {
+      tableData: [],
+      total: 0,
+      currentPage: 1
+    }
   },
   mounted () {
-    this.loadOrderList();
-    this.getOrderById(59);
+    this.loadOrderList(1);
   },
   methods: {
-    loadOrderList () {
-      loadOrders().then( data => {
-        
+    loadOrderList (pn) {
+      loadOrders(pn-1).then( data => {
+        this.tableData = data.SUCCESS.content
+        this.total = data.SUCCESS.totalPages
+        this.currentPage = data.SUCCESS.number+1
       }, data => {
-        console.log(data)
       })
     },
-    getOrderById (id) {
-      getOrder(id).then( data => {
-
-      })
+    pageCurrentChange (pageIndex) {
+      this.currentPage = pageIndex
+      this.loadOrderList (this.currentPage)
     }
   }
 }

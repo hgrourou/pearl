@@ -1,9 +1,9 @@
 import axios from '../interceptors'
 import base from '../index'
 
-export const loadOrders = () => { return axios({
+export const loadOrders = (pn) => { return axios({
   method: 'GET',
-  url: `${base}/order/getAllOrders`,
+  url: `${base}/order/getAllOrders?page=${pn}`,
 }).then(res => res.data); };
 
 export const getOrder = id => { 
