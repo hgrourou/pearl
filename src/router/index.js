@@ -24,7 +24,7 @@ export default new Router({
       path: '/',
       name: 'home',
       redirect: {
-        name: 'products'
+        name: 'login'
       },
       component: Home,
       iconCls: 'el-icon-message',

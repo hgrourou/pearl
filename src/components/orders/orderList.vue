@@ -7,7 +7,7 @@
       style="width: 100%">
       <el-table-column
         prop="id"
-        label="订单ID">
+        label="订单ID"
       </el-table-column>
       <el-table-column
         prop="buyer.nickName"
@@ -24,6 +24,16 @@
       <el-table-column
         prop="orderStatus"
         label="订单状态">
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="gotoDetail(scope.row.id)"
+            type="text"
+            size="small">
+            查看详情
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -60,6 +70,14 @@ export default {
     pageCurrentChange (pageIndex) {
       this.currentPage = pageIndex
       this.loadOrderList (this.currentPage)
+    },
+    gotoDetail (orderId) {
+      if (orderId) {
+        this.$router.push({
+          name: 'orderDetail',
+          params: {id: orderId}
+        })
+      }
     }
   }
 }
