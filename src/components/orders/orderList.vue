@@ -14,6 +14,10 @@
         label="姓名">
       </el-table-column>
       <el-table-column
+        prop="orderItems[0].product.id"
+        label="商品编号">
+      </el-table-column>
+      <el-table-column
         prop="orderItems[0].product.title"
         label="商品">
       </el-table-column>
@@ -62,6 +66,25 @@ export default {
     loadOrderList (pn) {
       loadOrders(pn-1).then( data => {
         this.tableData = data.SUCCESS.content
+        this.tableData.forEach(function(item) {
+          switch(item.orderStatus) {
+            case 'PlaceOrder':
+              item.orderStatus = '下单完成';
+              break;
+            case 'FinishPayment':
+              item.orderStatus = '支付完成';
+              break;
+            case 'NoPayment':
+              item.orderStatus = '未支付';
+              break;
+            case 'FinishReturn':
+              item.orderStatus = '退货完成';
+              break;
+            case 'FinishShipping':
+              item.orderStatus = '已收货';
+              break;
+          }
+        })
         this.total = data.SUCCESS.totalPages
         this.currentPage = data.SUCCESS.number+1
       }, data => {

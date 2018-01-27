@@ -12,3 +12,10 @@ export const getOrder = id => {
     url: `${base}/order/get?id=${id}`
   }).then( res => res.data);
 };
+
+export const updateOrder = ((id, status) => {
+  return axios({
+    method: 'PUT',
+    url: `${base}/order/updateOrderStatus?id=${id}&status=${status}`
+  }).then(res => res.data)
+});

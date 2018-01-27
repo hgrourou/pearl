@@ -54,7 +54,7 @@
       return {
         sysName: '珍珠管理后台',
         collapsed: false,
-        sysUserName: 'test',
+        sysUserName: '管理员',
         sysUserAvatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
         form: {
           name: '',
