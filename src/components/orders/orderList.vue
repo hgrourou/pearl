@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-import { loadOrders, getOrder } from '@/api/order/orderService'
+import { loadOrders } from '@/api/order/orderService'
 export default {
   data () {
     return {

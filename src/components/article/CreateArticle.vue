@@ -5,10 +5,30 @@
         <el-form-item label="标题">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
+        <el-form-item label="作者">
+          <el-input v-model="form.author"></el-input>
+        </el-form-item>
+        <el-form-item label="封面图">
+          <input id="picture" type="file" @change="uploadPicture" />
+        </el-form-item>
         <el-form-item label="内容">
           <Editor :defaultMsg="defaultMsg" :config="config"></Editor>
         </el-form-item>
-      </el-form>        
+        <el-form-item label="文章类型">
+          <el-select v-model="form.categoryId" placeholder="请选择">
+            <el-option
+              v-for="item in categories"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="相关商品">
+          <el-input v-model="form.relatedProducts"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" @click="addArticle()" class="btn-add">发布文章</el-button>
     </el-col>
     <el-col :span="4">
     </el-col>
@@ -16,6 +36,8 @@
 </template>
 <script>
 import Editor from '@/components/common/Editor'
+import {uploadPicture} from '@/api/picture/pictureService'
+import {getAllCategories} from '@/api/category/categoryService'
 export default {
   components: {
     Editor
@@ -28,8 +50,33 @@ export default {
       },
       form: {
         title: '',
-        description: ''
-      }
+        author: '',
+        picture: '',
+        description: '',
+        categoryId:'',
+        relatedProducts: ''
+      },
+      // categories 相关
+      categories: []
+    }
+  },
+  mounted () {
+    this.getCategories()
+  },
+  methods : {
+    uploadPicture (e) {
+      file = e.target.files[0];
+      let formData = new FormData();
+      formData.append('picture', file);
+      // uploadPicture(formData, )
+    },
+    getCategories () {
+      getAllCategories().then(res => {
+        this.categories = res.articleCategories
+      })
+    },
+    addArticle () {
+      console.log(this.form)
     }
   }
 }
@@ -40,6 +87,33 @@ export default {
   }
   .header {
     margin-top: 30px
+  }
+  .btn-add {
+    margin: 30px auto;
+  }
+  // 上传图片
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>
 
