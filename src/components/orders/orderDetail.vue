@@ -27,17 +27,15 @@
     </div>
     <div class="order-address">
       <h3>收货信息</h3>
-      <el-row type="flex">
-        <el-col :span="6">国家/地区: {{address.country}}</el-col>
-        <el-col :span="6">省: {{address.province}}</el-col>
-        <el-col :span="6">市: {{address.city}}</el-col>
-        <el-col :span="6">详细地址: {{address.addressDetails}}</el-col>
+      <el-row type="flex" >
+        <el-col :span="24">
+          {{address.consigneeName}}, {{address.phone}}, 
+        </el-col>
       </el-row>
       <el-row type="flex">
-        <el-col :span="6">收货人: {{address.consigneeName}}</el-col>
-        <el-col :span="6">用户ID: {{address.userId}}</el-col>
-        <el-col :span="6">邮政编码: {{address.zipCode}}</el-col>
-        <el-col :span="6">电话: {{address.phone}}</el-col>
+        <el-col :span="24">
+          {{address.country}} {{address.province}} {{address.city}} {{address.addressDetails}} {{address.zipCode}}
+        </el-col>
       </el-row>
     </div>
     <div class="order-payment">
@@ -137,7 +135,7 @@ export default {
           this.orderData.addressInfo = this.orderData.addressInfo.replace('{', '').replace('}', '')
           this.customer = this.orderData.buyer
           this.orderItems = this.orderData.orderItems
-          this.payment = this.orderData.payments[0]
+          this.payment = this.orderData.payments.length > 0 ? this.orderData.payments[0] : {payType: '', payment: '', paymentNo: ''}
           this.orderStatus = this.orderData.orderStatus
           let addressArray = this.orderData.addressInfo.split(',')
           addressArray.forEach(function(item) {
