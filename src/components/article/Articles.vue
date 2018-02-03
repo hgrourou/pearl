@@ -7,28 +7,24 @@
       style="width: 100%">
       <el-table-column
         prop="id"
-        label="文章ID"
+        label="文章ID">
       </el-table-column>
       <el-table-column
         prop="title"
         label="标题">
       </el-table-column>
-      <!-- <el-table-column
-        prop="orderItems[0].product.id"
-        label="商品编号">
+      <el-table-column
+        prop="coverPicture.url"
+        label="图片">
       </el-table-column>
       <el-table-column
-        prop="orderItems[0].product.title"
-        label="商品">
+        prop="author"
+        label="作者">
       </el-table-column>
       <el-table-column
-        prop="totalProductPrice"
-        label="订单金额">
+        prop="articleCategory.name"
+        label="文章类型">
       </el-table-column>
-      <el-table-column
-        prop="orderStatus"
-        label="订单状态">
-      </el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -67,6 +63,7 @@ export default {
     getArticlesByPage (pn) {
       getAllArticles(pn-1).then( data => {
         this.tableData = data.SUCCESS.content
+        console.log(this.tableData)
         this.total = data.SUCCESS.totalPages
         this.currentPage = data.SUCCESS.number+1
       }, data => {
@@ -76,11 +73,11 @@ export default {
       this.currentPage = pageIndex
       this.loadOrderList (this.currentPage)
     },
-    gotoDetail (orderId) {
-      if (orderId) {
+    gotoDetail (articleId) {
+      if (articleId) {
         this.$router.push({
-          name: 'orderDetail',
-          params: {id: orderId}
+          name: 'editArticle',
+          params: {id: articleId}
         })
       }
     }
