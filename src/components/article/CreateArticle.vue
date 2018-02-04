@@ -8,14 +8,14 @@
         <el-form-item label="作者">
           <el-input v-model="form.author"></el-input>
         </el-form-item>
-        <el-form-item label="封面图">
+        <el-form-item label="封面图" style="text-align:left;">
           <input id="picture" type="file" @change="uploadPicture" />
         </el-form-item>
         <el-form-item label="内容">
-          <Editor :defaultMsg="defaultMsg" :config="config"></Editor>
+          <Editor ref="editor" :defaultMsg="defaultMsg" :config="config"></Editor>
         </el-form-item>
-        <el-form-item label="文章类型">
-          <el-select v-model="form.categoryId" placeholder="请选择">
+        <el-form-item label="文章类型" style="text-align:left;">
+          <el-select v-model="form.articleCategory" placeholder="请选择">
             <el-option
               v-for="item in categories"
               :key="item.id"
@@ -25,10 +25,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="相关商品">
-          <el-input v-model="form.relatedProducts"></el-input>
+          <el-input v-model="form.relatedProducts" placeholder="多个商品用逗号分隔"></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="primary" @click="addArticle()" class="btn-add">发布文章</el-button>
+      <el-button type="primary" @click="addArticle" class="btn-add">发布文章</el-button>
     </el-col>
     <el-col :span="4">
     </el-col>
@@ -38,6 +38,7 @@
 import Editor from '@/components/common/Editor'
 import {uploadPicture} from '@/api/picture/pictureService'
 import {getAllCategories} from '@/api/category/categoryService'
+import {addArticle} from '@/api/article/articleService'
 export default {
   components: {
     Editor
@@ -51,9 +52,9 @@ export default {
       form: {
         title: '',
         author: '',
-        picture: '',
-        description: '',
-        categoryId:'',
+        coverPicture: '',
+        articleCategory:'',
+        content: '',
         relatedProducts: ''
       },
       // categories 相关
@@ -65,10 +66,14 @@ export default {
   },
   methods : {
     uploadPicture (e) {
-      file = e.target.files[0];
+      let file = e.target.files[0];
       let formData = new FormData();
       formData.append('picture', file);
-      // uploadPicture(formData, )
+      uploadPicture(formData, 0, 0, '测试图片上传').then(function(data) {
+        console.log(data)
+      }, function(data) {
+        this.$message.error('上传图片失败');
+      })
     },
     getCategories () {
       getAllCategories().then(res => {
@@ -76,7 +81,22 @@ export default {
       })
     },
     addArticle () {
-      console.log(this.form)
+      this.form.content = this.$refs.editor.getUEContent();
+      this.form.coverPicture = 1;
+      this.form.relatedProducts = this.form.relatedProducts.split(',');
+      addArticle(this.form).then(res => {
+        if(res.SUCCESS) {
+          this.$message({
+            showClose: true,
+            message: '上传文章成功'
+          })
+          this.$router.push({
+            name: 'articleList'
+          })
+        }
+      }, res => {
+        this.$message.error('上传文章失败')
+      })
     }
   }
 }

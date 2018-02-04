@@ -33,6 +33,12 @@
             size="small">
             查看详情
           </el-button>
+          <el-button
+            @click.native.prevent="deleteArticle(scope.row.id)"
+            type="text"
+            size="small">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,7 +52,7 @@
   </div>
 </template>
 <script>
-import { getAllArticles } from '@/api/article/articleService'
+import { getAllArticles,deleteArticle } from '@/api/article/articleService'
 
 export default {
   data () {
@@ -63,7 +69,6 @@ export default {
     getArticlesByPage (pn) {
       getAllArticles(pn-1).then( data => {
         this.tableData = data.SUCCESS.content
-        console.log(this.tableData)
         this.total = data.SUCCESS.totalPages
         this.currentPage = data.SUCCESS.number+1
       }, data => {
@@ -79,6 +84,35 @@ export default {
           name: 'editArticle',
           params: {id: articleId}
         })
+      }
+    },
+    deleteArticle (articleId) {
+      if(articleId) {
+        this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteArticle(articleId).then(res => {
+            this.getArticlesByPage(this.currentPage);
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }, res => {
+            this.$message({
+              type: 'error',
+              message: '删除失败!'
+            });
+          })
+          
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
       }
     }
   }

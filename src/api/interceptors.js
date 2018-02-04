@@ -22,9 +22,9 @@ axios.interceptors.response.use(response => {
   return response;
 }, error => {
     if (error) {
-      router.push({
-        name: 'login',
-      })
+      // router.push({
+      //   name: 'login',
+      // })
     }
     return Promise.reject(error.response.data) 
 });
