@@ -9,7 +9,8 @@
           <el-input v-model="form.author"></el-input>
         </el-form-item>
         <el-form-item label="封面图" style="text-align:left;">
-          <input id="picture" type="file" @change="uploadPicture" />
+          <input id="picture" type="file" @change="uploadPicture" ref="coverInput"/>
+          <img v-if="coverUrl" :src="coverUrl" alt="上传封面图" width="200">
         </el-form-item>
         <el-form-item label="内容">
           <Editor ref="editor" :defaultMsg="defaultMsg" :config="config"></Editor>
@@ -57,20 +58,28 @@ export default {
         content: '',
         relatedProducts: ''
       },
+      // 上传图片后的url，在界面中显示
+      coverUrl: '',
       // categories 相关
       categories: []
     }
   },
   mounted () {
-    this.getCategories()
+    this.getCategories();
+    this.coverUrl = '';
   },
   methods : {
-    uploadPicture (e) {
-      let file = e.target.files[0];
+    uploadPicture () {
+      // let file = e.target.files[0];
+      let file = this.$refs.coverInput.files[0];
+      console.log(file)
       let formData = new FormData();
-      formData.append('picture', file);
+      formData.append('picture', file, file.name);
+
       uploadPicture(formData, 0, 0, '测试图片上传').then(function(data) {
         console.log(data)
+        this.coverUrl = data.picture.url;
+        this.form.coverPicture = data.picture.id
       }, function(data) {
         this.$message.error('上传图片失败');
       })
