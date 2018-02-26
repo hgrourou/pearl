@@ -1,23 +1,28 @@
 import axios from '../interceptors'
 import base from '../index'
+import $ from 'jquery'
+import { getCookie } from '@/util/cookie'
 
-export const uploadPicture = (formData, height, width, description) => { return axios({
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  data: formData,
-  url: `${base}/picture/add?height=${height}&widt=${width}&description=${description}`,
-}).then(res => res.data); };
+export const uploadPicture = (formData, height, width, description) => { 
+  let token = getCookie('token')
+  // let settings = {
+  //   url: `${base}/picture/add?height=0&width=0&description=${description}`,
+  //   type: "POST",
+  //   headers: {
+  //     "authorization": `Bearer ${token}`,
+  //   },
+  //   data: formData,
+  // };
+  $.ajax({
+    url: `${base}/picture/add?height=0&width=0&description=${description}`,
+    type: "POST",
+    headers: {
+      "authorization": `Bearer ${token}`,
+    },
+    data: formData,
+  }).done(function (response) {
 
-// this.axios.post('/avatar', image, {
-//   headers: {
-//     "Content-Type": "multipart/form-data"
-//   }
-// })
+    console.log(response)
+  });
+};
 
-// export const uploadPicture = (formData, height, width, description) => { return axios.post(`${base}/picture/add?height=${height}&width=${width}&description=${description}`, formData, {
-//   headers: {
-//     "Content-Type": "application/x-www-form-urlencoded"
-//   }
-// }).then(res => res.data); };

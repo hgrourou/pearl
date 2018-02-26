@@ -1,2 +1,2 @@
-let base = 'http://116.62.113.192/admin'
+let base = 'http://www.talkingpearl.com/admin'
 export default base

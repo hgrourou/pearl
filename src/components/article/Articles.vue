@@ -16,6 +16,9 @@
       <el-table-column
         prop="coverPicture.url"
         label="图片">
+        <template slot-scope="scope">
+          <img :src="scope.row.coverPicture.url" alt="" style="height: 100px">
+        </template>
       </el-table-column>
       <el-table-column
         prop="author"
