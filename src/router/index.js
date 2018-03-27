@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
-import Products from '@/components/Products'
 
 import Articles from '@/components/article/Articles'
 import CreateArticle from '@/components/article/CreateArticle'
 import EditArticle from '@/components/article/EditArticle'
 import orderList from '@/components/orders/orderList'
 import orderDetail from '@/components/orders/orderDetail'
+
+import productDetail from '@/components/product/ProductDetail'
+import productList from '@/components/product/ProductList'
 
 Vue.use(Router)
 
@@ -31,7 +33,7 @@ export default new Router({
         {
           path: '/products',
           name: 'products',
-          component: Products
+          component: productList
         }
       ]
     },
@@ -59,6 +61,27 @@ export default new Router({
           component: EditArticle
         }
       ]
+    },
+    {
+      path: '/products',
+      redirect: {
+        name: 'productList'
+      },
+      name: 'products',
+      component: Home,
+      children: [{
+        path: '/products/list',
+        name: 'productList',
+        component: productList
+      }, {
+        path: '/products/:id',
+        name: 'productDetail',
+        component: productDetail
+      }, {
+        path: '/products/create',
+        name: 'productCreate',
+        component: productDetail
+      }]
     },
     {
       path: '/orders',

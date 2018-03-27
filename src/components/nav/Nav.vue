@@ -15,7 +15,7 @@
         <el-menu-item index="/articles/create">发布文章</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <!-- <el-submenu index="2">
+    <el-submenu index="2">
       <template slot="title">
         <i class="el-icon-menu"></i>
         <span>商品</span>
@@ -24,7 +24,7 @@
         <el-menu-item index="/products/list">商品列表</el-menu-item>
         <el-menu-item index="/products/create">发布商品</el-menu-item>
       </el-menu-item-group>
-    </el-submenu> -->
+    </el-submenu>
     <el-submenu index="/orders">
       <template slot="title">
         <i class="el-icon-menu"></i>
