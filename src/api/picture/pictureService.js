@@ -26,3 +26,28 @@ export const uploadPicture = (formData, height, width, description) => {
   });
 };
 
+// export const uploadPicture = (formData, height, width, description) => { 
+//   let token = getCookie('token')
+//   let settings = {
+//     url: `${base}/picture/add?height=0&width=0&description=${description}`,
+//     type: "POST",
+//     headers: {
+//       "authorization": `Bearer ${token}`,
+//       'Content-type': 'application/x-www-form-urlencoded'
+//     },
+//     data: formData,
+//   };
+  // $.ajax({
+  //   url: `${base}/picture/add?height=0&width=0&description=${description}`,
+  //   type: "POST",
+  //   headers: {
+  //     "authorization": `Bearer ${token}`,
+  //   },
+  //   data: formData,
+  // }).done(function (response) {
+
+  //   console.log(response)
+  // });
+};
+
+
