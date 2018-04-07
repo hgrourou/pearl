@@ -32,6 +32,12 @@
             size="small">
             查看详情
           </el-button>
+          <el-button
+            @click.native.prevent="deleteProduct(scope.row.id)"
+            type="danger"
+            size="error">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -45,7 +51,7 @@
   </div>
 </template>
 <script>
-import { loadProducts } from '@/api/product/ProductService'
+import { loadProducts,deleteProduct } from '@/api/product/ProductService'
 export default {
   data () {
     return {
@@ -76,6 +82,35 @@ export default {
           name: 'orderDetail',
           params: {id: orderId}
         })
+      }
+    },
+    deleteProduct (productId) {
+      if(productId) {
+        this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteProduct(productId).then(res => {
+            this.loadProductList(this.currentPage);
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }, res => {
+            this.$message({
+              type: 'error',
+              message: '删除失败!'
+            });
+          })
+          
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
       }
     }
   }

@@ -13,9 +13,17 @@ export const loadProducts = (pn) => { return axios({
 //   }).then( res => res.data);
 // };
 
-// export const updateOrder = ((id, status) => {
-//   return axios({
-//     method: 'PUT',
-//     url: `${base}/order/updateOrderStatus?id=${id}&status=${status}`
-//   }).then(res => res.data)
-// });
+export const addProduct = ((form) => {
+  return axios({
+    method: 'POST',
+    data: form,
+    url: `${base}/product/add`
+  }).then(res => res.data)
+});
+
+export const deleteProduct = (id) => {
+  return axios({
+    method: 'DELETE',
+    url: `${base}/product/delete?id=${id}`
+  }).then(res => res.data )
+}

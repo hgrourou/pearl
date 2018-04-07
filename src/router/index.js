@@ -25,17 +25,17 @@ export default new Router({
       path: '/',
       name: 'home',
       redirect: {
-        name: 'login'
+        name: 'products'
       },
       component: Home,
-      iconCls: 'el-icon-message',
-      children: [
-        {
-          path: '/products',
-          name: 'products',
-          component: productList
-        }
-      ]
+      // iconCls: 'el-icon-message',
+      // children: [
+      //   {
+      //     path: '/products',
+      //     name: 'products',
+      //     component: productList
+      //   }
+      // ]
     },
     {
       path: '/articles',

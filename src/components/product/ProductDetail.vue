@@ -28,6 +28,9 @@
             list-type="picture-card"
             <i class="el-icon-plus"></i>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
           <!-- :on-preview="handlePictureCardPreview" 
             :on-remove="handleRemove">-->
         </el-form-item>
@@ -45,24 +48,30 @@
 import Vue from 'vue'
 import {getProductCategories} from '@/api/category/categoryService'
 import {addArticle} from '@/api/article/articleService'
+import {uploadPicture1} from '@/api/picture/pictureService'
+import { addProduct } from '@/api/product/productService'
 import { getCookie } from '@/util/cookie'
 import base from '@/api/index'
 export default {
 
   data () {
     return {
-      defaultMsg: '测试发文章',
-      config: {
-        initialFrameHeight: 350
-      },
       form: {
-        title: '',
-        description: '',
+        title: 'dsa',
+        description: 'dsa',
         category: '',
-        coverPicture: '',
+        coverPicture: '169',
+        pictures: [169],
+        price: '10000',
+        nowPrice: '',
+        clickCount: 0,
+        collectionCount: 0,
+        onShelf: true
       },
       categories: [],
-      coverUrl: ''
+      coverUrl: '',
+      dialogVisible: false,
+      dialogImageUrl: ''
     }
   },
   mounted () {
@@ -70,12 +79,12 @@ export default {
   },
   methods : {
     uploadPicture () {
-      let self = this;
-      let file = $('#picture')[0].files[0],
+      let self = this,
+        file = $('#picture')[0].files[0],
+        token = getCookie('token'),
+        description = 'upload product cover';
         formData = new FormData();
       formData.append('pictureFile', file);
-      let token = getCookie('token'),
-        description = 'upload article cover';
       $.ajax({
         url: `${base}/picture/add?height=0&width=0&description=${description}`,
         type: "POST",
@@ -88,7 +97,7 @@ export default {
         processData: false,
         success: function(response) {
           self.coverUrl = response.picture.url;
-          self.coverId = response.picture.id
+          self.form.coverPicture = response.picture.id
         }
       })
     },
@@ -99,6 +108,16 @@ export default {
     },
     createProcuct () {
       console.log(this.form)
+      this.form.nowPrice = this.form.price
+      addProduct(this.form).then((res) => {
+        this.$message({
+          type: 'success',
+          message: '创建成功!'
+        });
+      }, () => {
+
+      })
+      
     }
   }
 }
