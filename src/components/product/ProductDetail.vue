@@ -24,15 +24,19 @@
         </el-form-item>
         <el-form-item label="图片" class="left">
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            <i class="el-icon-plus"></i>
+            class="upload-demo"
+            :action="uploadImageUrl"
+            :headers="imageHeaders"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-success="handleSuccess"
+            :file-list="fileList"
+            multiple
+            name="pictureFile"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
-          <!-- :on-preview="handlePictureCardPreview" 
-            :on-remove="handleRemove">-->
         </el-form-item>
         <el-form-item label="价格">
           <el-input v-model="form.price" placeholder="请输入标题"></el-input>
@@ -49,20 +53,19 @@ import Vue from 'vue'
 import {getProductCategories} from '@/api/category/categoryService'
 import {addArticle} from '@/api/article/articleService'
 import {uploadPicture1} from '@/api/picture/pictureService'
-import { addProduct } from '@/api/product/productService'
+import { addProduct } from '@/api/product/ProductService'
 import { getCookie } from '@/util/cookie'
 import base from '@/api/index'
 export default {
-
   data () {
     return {
       form: {
-        title: 'dsa',
-        description: 'dsa',
+        title: '',
+        description: '',
         category: '',
-        coverPicture: '169',
-        pictures: [169],
-        price: '10000',
+        coverPicture: '',
+        pictures: [],
+        price: '',
         nowPrice: '',
         clickCount: 0,
         collectionCount: 0,
@@ -70,8 +73,12 @@ export default {
       },
       categories: [],
       coverUrl: '',
-      dialogVisible: false,
-      dialogImageUrl: ''
+      fileList: [],
+      // 上传图片地址
+      uploadImageUrl: `${base}/picture/add?width=0&height=0&description="upload product list image"`,
+      imageHeaders: {
+        authorization: `Bearer ${getCookie('token')}`,
+      }
     }
   },
   mounted () {
@@ -82,7 +89,7 @@ export default {
       let self = this,
         file = $('#picture')[0].files[0],
         token = getCookie('token'),
-        description = 'upload product cover';
+        description = 'upload product cover',
         formData = new FormData();
       formData.append('pictureFile', file);
       $.ajax({
@@ -118,6 +125,22 @@ export default {
 
       })
       
+    },
+    handlePreview (file) {
+      console.log(file)
+    },
+    handleRemove (file, fileList) {
+      for(let i = 0; i < this.form.pictures.length; i++) {
+        if(this.form.pictures[i] === file.response.picture.id) {
+          this.form.pictures.splice(i, 1);
+          break;
+        }
+      }
+    },
+    handleSuccess (response, file, fileList) {
+      if(response.picture && response.picture.id) {
+        this.form.pictures.push(response.picture.id)
+      }
     }
   }
 }
@@ -136,28 +159,28 @@ export default {
     text-align: left;
   }
   // 上传图片
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+  // .avatar-uploader .el-upload {
+  //   border: 1px dashed #d9d9d9;
+  //   border-radius: 6px;
+  //   cursor: pointer;
+  //   position: relative;
+  //   overflow: hidden;
+  // }
+  // .avatar-uploader .el-upload:hover {
+  //   border-color: #409EFF;
+  // }
+  // .avatar-uploader-icon {
+  //   font-size: 28px;
+  //   color: #8c939d;
+  //   width: 178px;
+  //   height: 178px;
+  //   line-height: 178px;
+  //   text-align: center;
+  // }
+  // .avatar {
+  //   width: 178px;
+  //   height: 178px;
+  //   display: block;
+  // }
 </style>
 
