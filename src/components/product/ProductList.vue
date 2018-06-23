@@ -76,11 +76,11 @@ export default {
       this.currentPage = pageIndex
       this.loadProductList (this.currentPage)
     },
-    gotoDetail (orderId) {
-      if (orderId) {
+    gotoDetail (productId) {
+      if (productId) {
         this.$router.push({
-          name: 'orderDetail',
-          params: {id: orderId}
+          name: 'productDetail',
+          params: {id: productId}
         })
       }
     },

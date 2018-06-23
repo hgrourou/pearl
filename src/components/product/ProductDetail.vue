@@ -5,7 +5,7 @@
         <el-form-item label="标题">
           <el-input v-model="form.title" placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="作者">
+        <el-form-item label="商品描述">
           <el-input type="textarea" v-model="form.description" placeholder="请输入商品描述" :rows="2"></el-input>
         </el-form-item>
         <el-form-item label="类别" class="left">
@@ -39,7 +39,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="价格">
-          <el-input v-model="form.price" placeholder="请输入标题"></el-input>
+          <el-input v-model="form.price" placeholder="请输入价格"></el-input>
         </el-form-item>
       </el-form>
       <el-button type="primary" @click="createProcuct" class="btn-add">发布商品</el-button>
@@ -53,7 +53,7 @@ import Vue from 'vue'
 import {getProductCategories} from '@/api/category/categoryService'
 import {addArticle} from '@/api/article/articleService'
 import {uploadPicture1} from '@/api/picture/pictureService'
-import { addProduct } from '@/api/product/ProductService'
+import { addProduct,getProduct } from '@/api/product/ProductService'
 import { getCookie } from '@/util/cookie'
 import base from '@/api/index'
 export default {
@@ -83,6 +83,10 @@ export default {
   },
   mounted () {
     this.getCategories();
+    if(this.$route.params.id) {
+      this.getProduct(this.$route.params.id)
+    }
+    console.log(this.$route.params.id)
   },
   methods : {
     uploadPicture () {
@@ -121,8 +125,8 @@ export default {
           type: 'success',
           message: '创建成功!'
         });
-      }, () => {
-
+      }, (res) => {
+        console.log(res)
       })
       
     },
@@ -141,6 +145,12 @@ export default {
       if(response.picture && response.picture.id) {
         this.form.pictures.push(response.picture.id)
       }
+    },
+    getProduct (productId) {
+      getProduct(productId).then(res => {
+        let product = res.SUCCESS
+        this.form.title = product.title
+      })
     }
   }
 }

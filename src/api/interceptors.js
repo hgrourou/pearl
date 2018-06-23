@@ -20,13 +20,16 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(response => {
   return response;
-}, error => {
+}, (error, status, data) => {
+  console.log(error)
+  console.log(status)
+  console.log(data)
     if (error) {
       // router.push({
       //   name: 'login',
       // })
     }
-    return Promise.reject(error.response.data) 
+    return Promise.reject(error) 
 });
 
 export default axios
